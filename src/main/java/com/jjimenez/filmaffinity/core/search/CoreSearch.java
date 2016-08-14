@@ -329,8 +329,8 @@ public class CoreSearch extends AbstractCore {
 	/**
 	 * Through {@link Movie}, obtain all trailers from the trailers tab
 	 * 
-	 * @param {@link
-	 * 			Movie}
+	 * @param movie
+	 *            {@link Movie}
 	 * @return {@link Movie} with the trailers setted
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException
@@ -362,8 +362,8 @@ public class CoreSearch extends AbstractCore {
 	/**
 	 * Through {@link Movie}, obtain all images from the images tab
 	 * 
-	 * @param {@link
-	 * 			Movie}
+	 * @param movie
+	 *            {@link Movie}
 	 * @return {@link Movie} with the images setted
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException
@@ -394,8 +394,10 @@ public class CoreSearch extends AbstractCore {
 	/**
 	 * By means of a name and type of search (director or cast)
 	 * 
-	 * @param name of the person
-	 * @param type {@link TypeSearch} of search
+	 * @param name
+	 *            of the person
+	 * @param type
+	 *            {@link TypeSearch} of search
 	 * @return List<{@link Movie} with all Movies
 	 * @throws DirectorNotFoundException
 	 * @throws IOException
@@ -415,15 +417,14 @@ public class CoreSearch extends AbstractCore {
 		List<Movie> movieList = null;
 		if (_movies.size() > 0)
 			movieList = new ArrayList<Movie>();
-		else{
-			if("director".equals(type)){
-				throw new DirectorNotFoundException(String.format(ConstantsSearch.MESSAGE_DIRECTOR_NOT_FOUND_EXCEPTION, name));
-			}else{
+		else {
+			if ("director".equals(type)) {
+				throw new DirectorNotFoundException(
+						String.format(ConstantsSearch.MESSAGE_DIRECTOR_NOT_FOUND_EXCEPTION, name));
+			} else {
 				throw new CastNotFoundException(String.format(ConstantsSearch.MESSAGE_CAST_NOT_FOUND_EXCEPTION, name));
 			}
 		}
-			
-			
 
 		for (Element element : _movies) {
 			String _id = element.attr("data-movie-id");
