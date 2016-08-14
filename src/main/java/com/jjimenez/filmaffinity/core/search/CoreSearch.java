@@ -16,6 +16,7 @@ import com.jjimenez.filmaffinity.entity.Cast;
 import com.jjimenez.filmaffinity.entity.Director;
 import com.jjimenez.filmaffinity.entity.Movie;
 import com.jjimenez.filmaffinity.entity.ProxyHTTP;
+import com.jjimenez.filmaffinity.exception.CastNotFoundException;
 import com.jjimenez.filmaffinity.exception.DirectorNotFoundException;
 import com.jjimenez.filmaffinity.exception.MovieNotFoundException;
 import com.jjimenez.filmaffinity.exception.NotEstablishedConnectionException;
@@ -414,9 +415,15 @@ public class CoreSearch extends AbstractCore {
 		List<Movie> movieList = null;
 		if (_movies.size() > 0)
 			movieList = new ArrayList<Movie>();
-		else
-			throw new DirectorNotFoundException(
-					String.format(ConstantsSearch.MESSAGE_DIRECTOR_NOT_FOUND_EXCEPTION, name));
+		else{
+			if("director".equals(type)){
+				throw new DirectorNotFoundException(String.format(ConstantsSearch.MESSAGE_DIRECTOR_NOT_FOUND_EXCEPTION, name));
+			}else{
+				throw new CastNotFoundException(String.format(ConstantsSearch.MESSAGE_CAST_NOT_FOUND_EXCEPTION, name));
+			}
+		}
+			
+			
 
 		for (Element element : _movies) {
 			String _id = element.attr("data-movie-id");
