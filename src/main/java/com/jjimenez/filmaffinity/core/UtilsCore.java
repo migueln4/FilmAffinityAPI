@@ -27,7 +27,7 @@ class UtilsCore {
 	 * @param proxy
 	 *            {@link ProxyHTTP} to configure the system
 	 */
-	static void setProxy(ProxyHTTP proxy) {
+	static void setProxy(final ProxyHTTP proxy) {
 
 		if (proxy != null) {
 			System.setProperty(Constants.HTTP_PROXY_HOST, proxy.getHost());

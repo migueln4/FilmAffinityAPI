@@ -1,4 +1,4 @@
-package com.jjimenez.filmaffinity.scraping.test.core;
+package com.jjimenez.filmaffinity.test.core;
 
 import org.springframework.context.annotation.Configuration;
 

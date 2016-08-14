@@ -22,6 +22,7 @@ public final class ConstantsSearch {
 
 	// MESSAGES
 	protected static final String MESSAGE_MOVIE_NOT_FOUND_EXCEPTION = "Any movie has founded with this name: %s";
+	protected static final String MESSAGE_DIRECTOR_NOT_FOUND_EXCEPTION = "Any director has founded with this name: %s";
 	protected final static String MESSAGE_NOT_EMPTY = "%s must not be empty";
 	protected final static String MESSAGE_NOT_NULL = "%s must not be null";
 }

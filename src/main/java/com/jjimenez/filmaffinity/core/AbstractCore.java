@@ -96,8 +96,9 @@ public abstract class AbstractCore {
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException 
 	 */
-	protected static ResponseEntity search(final String URL, final String name, final String type) throws IOException, NotEstablishedConnectionException {
-
+	protected static ResponseEntity search(final String URL, final String name, final String type) throws IOException, NotEstablishedConnectionException {		
+		parameters.clear();
+		
 		parameters.put(Constants.PARAMETER_STEXT, name);
 		parameters.put(Constants.PARAMETER_STYPE, type);
 

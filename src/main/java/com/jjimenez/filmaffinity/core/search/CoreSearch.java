@@ -12,8 +12,11 @@ import org.jsoup.select.Elements;
 
 import com.jjimenez.filmaffinity.core.AbstractCore;
 import com.jjimenez.filmaffinity.core.ResponseEntity;
+import com.jjimenez.filmaffinity.entity.Cast;
+import com.jjimenez.filmaffinity.entity.Director;
 import com.jjimenez.filmaffinity.entity.Movie;
 import com.jjimenez.filmaffinity.entity.ProxyHTTP;
+import com.jjimenez.filmaffinity.exception.DirectorNotFoundException;
 import com.jjimenez.filmaffinity.exception.MovieNotFoundException;
 import com.jjimenez.filmaffinity.exception.NotEstablishedConnectionException;
 
@@ -91,6 +94,54 @@ public class CoreSearch extends AbstractCore {
 		movie = obtainTrailers(movie);
 
 		return movie;
+	}
+
+	/**
+	 * Search a director by means of a name and its {@link Movie}
+	 * 
+	 * @param name
+	 *            of director
+	 * @param proxy
+	 *            <em>null</em> if not use proxy, either, {@link ProxyHTTP}
+	 * @return {@link Director} founded
+	 * @throws IOException
+	 * @throws NotEstablishedConnectionException
+	 */
+	protected Director obtainDirector(final String name, final ProxyHTTP proxy)
+			throws IOException, NotEstablishedConnectionException {
+		AbstractCore.proxy = proxy;
+		Validate.notEmpty(name, String.format(ConstantsSearch.MESSAGE_NOT_EMPTY, "Name"));
+
+		List<Movie> movieList = obtainMovieListByName(name, TypeSearch.DIRECTOR.getTypeSearch());
+		Director director = Director.getInstance();
+		director.setName(name);
+		director.setMovieList(movieList);
+
+		return director;
+	}
+
+	/**
+	 * Search an actor/actress by means of a name and its {@link Movie}
+	 * 
+	 * @param name
+	 *            of an actor/actress
+	 * @param proxy
+	 *            <em>null</em> if not use proxy, either, {@link ProxyHTTP}
+	 * @return {@link Cast} founded
+	 * @throws IOException
+	 * @throws NotEstablishedConnectionException
+	 */
+	protected Cast obtainCast(final String name, final ProxyHTTP proxy)
+			throws IOException, NotEstablishedConnectionException {
+		AbstractCore.proxy = proxy;
+		Validate.notEmpty(name, String.format(ConstantsSearch.MESSAGE_NOT_EMPTY, "Name"));
+
+		List<Movie> movieList = obtainMovieListByName(name, TypeSearch.CAST.getTypeSearch());
+		Cast cast = Cast.getInstance();
+		cast.setName(name);
+		cast.setMovieList(movieList);
+
+		return cast;
 	}
 
 	/**
@@ -174,7 +225,8 @@ public class CoreSearch extends AbstractCore {
 		movie.setRated(StringUtils.isEmpty(ratio) ? null : Double.valueOf(ratio));
 		// ORIGINAL TITLE
 		Elements _originalTitle = document.select("dd");
-		String originalTitle = !_originalTitle.isEmpty() ? _originalTitle.first().text().replaceAll("aka", StringUtils.EMPTY) : StringUtils.EMPTY;
+		String originalTitle = !_originalTitle.isEmpty()
+				? _originalTitle.first().text().replaceAll("aka", StringUtils.EMPTY) : StringUtils.EMPTY;
 		movie.setOriginalTitle(originalTitle);
 		// YEAR
 		Elements _year = document.select("dd[itemprop=datePublished]");
@@ -276,13 +328,14 @@ public class CoreSearch extends AbstractCore {
 	/**
 	 * Through {@link Movie}, obtain all trailers from the trailers tab
 	 * 
-	 * @param {@link Movie}            
+	 * @param {@link
+	 * 			Movie}
 	 * @return {@link Movie} with the trailers setted
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException
 	 */
 	private Movie obtainTrailers(Movie movie) throws IOException, NotEstablishedConnectionException {
-		Validate.notNull(movie,String.format(ConstantsSearch.MESSAGE_NOT_NULL, "Movie"));
+		Validate.notNull(movie, String.format(ConstantsSearch.MESSAGE_NOT_NULL, "Movie"));
 
 		final String URL = ConstantsSearch.URL_BASE.concat(ConstantsSearch.URL_TRAILERS)
 				.concat(movie.getId().toString());
@@ -305,22 +358,22 @@ public class CoreSearch extends AbstractCore {
 		return movie;
 	}
 
-
 	/**
 	 * Through {@link Movie}, obtain all images from the images tab
 	 * 
-	 * @param {@link Movie}            
+	 * @param {@link
+	 * 			Movie}
 	 * @return {@link Movie} with the images setted
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException
 	 */
 	private Movie obtainImages(Movie movie) throws IOException, NotEstablishedConnectionException {
-		Validate.notNull(movie,String.format(ConstantsSearch.MESSAGE_NOT_NULL, "Movie"));
+		Validate.notNull(movie, String.format(ConstantsSearch.MESSAGE_NOT_NULL, "Movie"));
 
 		final String URL = ConstantsSearch.URL_BASE.concat(ConstantsSearch.URL_IMAGES).concat(movie.getId().toString());
 
 		ResponseEntity response = accessToTabMovie(URL);
-		
+
 		cookies.putAll(response.getCookies());
 		Document document = response.getResponse().parse();
 
@@ -335,6 +388,44 @@ public class CoreSearch extends AbstractCore {
 		movie.setImages(images);
 
 		return movie;
+	}
+
+	/**
+	 * By means of a name and type of search (director or cast)
+	 * 
+	 * @param name of the person
+	 * @param type {@link TypeSearch} of search
+	 * @return List<{@link Movie} with all Movies
+	 * @throws DirectorNotFoundException
+	 * @throws IOException
+	 * @throws NotEstablishedConnectionException
+	 */
+	private List<Movie> obtainMovieListByName(final String name, final String type)
+			throws DirectorNotFoundException, IOException, NotEstablishedConnectionException {
+
+		final String URL = ConstantsSearch.URL_BASE.concat(String.format(ConstantsSearch.URL_SEARCH, name, type));
+
+		ResponseEntity response = search(URL, name, type);
+
+		cookies.putAll(response.getCookies());
+		Document document = response.getResponse().parse();
+
+		Elements _movies = document.select("div[data-movie-id]");
+		List<Movie> movieList = null;
+		if (_movies.size() > 0)
+			movieList = new ArrayList<Movie>();
+		else
+			throw new DirectorNotFoundException(
+					String.format(ConstantsSearch.MESSAGE_DIRECTOR_NOT_FOUND_EXCEPTION, name));
+
+		for (Element element : _movies) {
+			String _id = element.attr("data-movie-id");
+			Long id = _id != null ? Long.valueOf(_id) : null;
+			Movie movie = obtainMovie(id, proxy);
+			movieList.add(movie);
+		}
+
+		return movieList;
 	}
 
 }
