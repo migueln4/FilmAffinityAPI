@@ -212,10 +212,10 @@ public class CoreSearch extends AbstractCore {
 		Movie movie = Movie.getInstance();
 		// ID
 		movie.setId(id);
-		// ORIGINAL TITLE
+		// TITLE
 		Elements _title = document.select("#mt-content-cell > div > h1");
 		String title = !_title.isEmpty() ? _title.first().text() : StringUtils.EMPTY;
-		movie.setOriginalTitle(title);
+		movie.setTitle(title);
 		// DEFAULT IMAGE
 		Elements _image = document.select("#movie-main-image-container > a");
 		String imagePath = !_image.isEmpty() ? _image.first().attr("href") : StringUtils.EMPTY;

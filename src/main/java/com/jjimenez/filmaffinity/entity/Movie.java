@@ -12,6 +12,7 @@ import java.util.Arrays;
 public class Movie {
 
 	private Long id;
+	private String title;
 	private String originalTitle;
 	private String year;
 	private Long duration;
@@ -189,6 +190,14 @@ public class Movie {
 		this.imageDefault = imageDefault;
 	}
 
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -210,6 +219,7 @@ public class Movie {
 		result = prime * result + ((rated == null) ? 0 : rated.hashCode());
 		result = prime * result + Arrays.hashCode(script);
 		result = prime * result + ((synopsis == null) ? 0 : synopsis.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + Arrays.hashCode(trailers);
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
 		return result;
@@ -282,6 +292,11 @@ public class Movie {
 				return false;
 		} else if (!synopsis.equals(other.synopsis))
 			return false;
+		if (title == null) {
+			if (other.title != null)
+				return false;
+		} else if (!title.equals(other.title))
+			return false;
 		if (!Arrays.equals(trailers, other.trailers))
 			return false;
 		if (year == null) {
@@ -294,14 +309,15 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "MovieDTO [id=" + id + ", originalTitle=" + originalTitle + ", year=" + year + ", duration=" + duration
-				+ ", flagCountry=" + flagCountry + ", country=" + country + ", director=" + Arrays.toString(director)
-				+ ", script=" + Arrays.toString(script) + ", music=" + Arrays.toString(music) + ", photography="
-				+ Arrays.toString(photography) + ", cast=" + Arrays.toString(cast) + ", producer="
-				+ Arrays.toString(producer) + ", genre=" + Arrays.toString(genre) + ", groups="
-				+ Arrays.toString(groups) + ", synopsis=" + synopsis + ", rated=" + rated + ", images="
-				+ Arrays.toString(images) + ", imageDefault=" + imageDefault + ", trailers=" + Arrays.toString(trailers)
-				+ "]";
+		return "Movie [id=" + id + ", title=" + title + ", originalTitle=" + originalTitle + ", year=" + year
+				+ ", duration=" + duration + ", flagCountry=" + flagCountry + ", country=" + country + ", director="
+				+ Arrays.toString(director) + ", script=" + Arrays.toString(script) + ", music="
+				+ Arrays.toString(music) + ", photography=" + Arrays.toString(photography) + ", cast="
+				+ Arrays.toString(cast) + ", producer=" + Arrays.toString(producer) + ", genre="
+				+ Arrays.toString(genre) + ", groups=" + Arrays.toString(groups) + ", synopsis=" + synopsis + ", rated="
+				+ rated + ", images=" + Arrays.toString(images) + ", imageDefault=" + imageDefault + ", trailers="
+				+ Arrays.toString(trailers) + "]";
 	}
 
+	
 }
