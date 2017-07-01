@@ -64,14 +64,11 @@ class UtilsCore {
 	/**
 	 * Check if the given key exists on the system
 	 * 
-	 * @param key
+	 * @param key to search
 	 * @return <em>TRUE</em> if exists, <em>FALSE</em> in another case
 	 */
 	private static boolean existsKey(String key) {
-		if (key != null)
-			return System.getProperties().containsKey(key);
-		else
-			return false;
+		return key != null && System.getProperties().containsKey(key);
 	}
 
 }
