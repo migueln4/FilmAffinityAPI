@@ -289,6 +289,7 @@ public class CoreSearch extends AbstractCore {
 		i=0;
 		for (String str : scripts) {
 			nuevoArrayScript[i] = str;
+			i++;
 		}
 		movie.setScript(nuevoArrayScript);
 
@@ -330,31 +331,36 @@ public class CoreSearch extends AbstractCore {
 
 
 
-
-
-
-
-
-
-
 		// PHOTOGRAPHY
 		Elements _photography = document.select("dt:contains(Fotografía) + dd > div > span");
-		i = 0;
 		String[] photography = new String[_photography.size()];
+		List<String> photographyList = new ArrayList<String>();
 		for (Element element : _photography) {
-			photography[i] = element.text().replaceAll(",", StringUtils.EMPTY);
-			i++;
+			String dato = element.text().replaceAll(",", StringUtils.EMPTY);
+			if(!dato.equals("Animation") && !dato.equals("Documentary")) {
+				photographyList.add(dato);
+			}
 		}
-		movie.setPhotography(photography);
+		movie.setPhotography(photographyList.toArray(new String[photographyList.size()]));
+
+
+
+
 		// CAST
 		Elements _cast = document.select("dt:contains(Reparto) + dd > span");
-		i = 0;
 		String[] cast = new String[_cast.size()];
+		List<String> castList = new ArrayList<String>();
 		for (Element element : _cast) {
-			cast[i] = element.text().replaceAll(",", StringUtils.EMPTY);
-			i++;
+			String dato = element.text().replaceAll(",", StringUtils.EMPTY);
+			if(!dato.equals("Animation") && !dato.equals("Documentary"))
+				castList.add(dato);
 		}
-		movie.setCast(cast);
+		movie.setCast(castList.toArray(new String[castList.size()]));
+
+
+
+
+
 /*		// PRODUCERS
 		Elements _producer = document.select("dt:contains(Productora) + dd > div > span");
 		String[] producer = _producer.first().text().split(" / ");
