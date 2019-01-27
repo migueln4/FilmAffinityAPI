@@ -68,8 +68,8 @@ public class CoreSearch extends AbstractCore {
 			throw new MovieNotFoundException(String.format(ConstantsSearch.MESSAGE_MOVIE_NOT_FOUND_EXCEPTION, name));
 
 		Movie movie = obtainMetadata(id);
-		movie = obtainImages(movie);
-		movie = obtainTrailers(movie);
+/*		movie = obtainImages(movie);
+		movie = obtainTrailers(movie);*/
 
 		return movie;
 	}
@@ -91,8 +91,8 @@ public class CoreSearch extends AbstractCore {
 
 		AbstractCore.proxy = proxy;
 		Movie movie = obtainMetadata(id);
-		movie = obtainImages(movie);
-		movie = obtainTrailers(movie);
+/*		movie = obtainImages(movie);
+		movie = obtainTrailers(movie);*/
 
 		return movie;
 	}
@@ -211,7 +211,7 @@ public class CoreSearch extends AbstractCore {
 
 		Movie movie = Movie.getInstance();
 		// ID
-		movie.setId(id);
+/*		movie.setId(id);*/
 		// TITLE
 		Elements _title = document.select("#mt-content-cell > div > h1");
 		String title = !_title.isEmpty() ? _title.first().text() : StringUtils.EMPTY;
@@ -223,7 +223,9 @@ public class CoreSearch extends AbstractCore {
 		// RATIO
 		Elements _ratio = document.select("#movie-rat-avg");
 		String ratio = !_ratio.isEmpty() ? _ratio.first().attr("content") : StringUtils.EMPTY;
+/*
 		movie.setRated(StringUtils.isEmpty(ratio) ? null : Double.valueOf(ratio));
+*/
 		// ORIGINAL TITLE
 		Elements _originalTitle = document.select("dd");
 		String originalTitle = !_originalTitle.isEmpty()
@@ -232,7 +234,9 @@ public class CoreSearch extends AbstractCore {
 		// YEAR
 		Elements _year = document.select("dd[itemprop=datePublished]");
 		String year = !_year.isEmpty() ? _year.first().text() : StringUtils.EMPTY;
-		movie.setYear(year);
+		Integer yearInt = Integer.parseInt(year);
+		System.out.println("//////////////El año es ====> "+yearInt);
+		movie.setYear(yearInt);
 		// DURATION
 		Elements _duration = document.select("dd[itemprop=duration]");
 		String duration = !_duration.isEmpty() ? _duration.first().text().split(" ")[0] : StringUtils.EMPTY;
@@ -244,7 +248,9 @@ public class CoreSearch extends AbstractCore {
 		// COUNTRY FLAG
 		String countryFlag = country != StringUtils.EMPTY
 				? ConstantsSearch.URL_BASE_EN.concat(_country.first().attr("src")) : StringUtils.EMPTY;
+/*
 		movie.setFlagCountry(countryFlag);
+*/
 		// DIRECTORS
 		Elements _directors = document.select("dd[class=directors] > span");
 		int i = 0;
@@ -254,24 +260,83 @@ public class CoreSearch extends AbstractCore {
 			i++;
 		}
 		movie.setDirector(directors);
+
+
+
+
 		// SCRIPTS
-		Elements _scripts = document.select("dt:contains(Guión) + dd > div > span");
+		Elements _scripts = document.select("dt:contains(Guion) + dd > div > span");
 		i = 0;
-		String[] scripts = new String[_scripts.size()];
+		List<String> scripts = new ArrayList<String>();
 		for (Element element : _scripts) {
-			scripts[i] = element.text().replaceAll(",", StringUtils.EMPTY);
+			String addString = element.text();
+			System.out.println("SCRIPTS["+i+"] =======> "+addString);
+			int parentesis = addString.indexOf(" (");
+			if(parentesis >= 0) {
+				addString = addString.substring(0, parentesis);
+				addString = addString.replaceAll(",",StringUtils.EMPTY);
+				scripts.add(addString);
+				System.out.println("[SCRIPT] HE AÑADIDO ===========> "+addString);
+				break;
+			} else {
+				addString = addString.replaceAll(",", StringUtils.EMPTY);
+				System.out.println("[SCRIPT] HE AÑADIDO ===========> "+addString);
+				scripts.add(addString);
+			}
 			i++;
 		}
-		movie.setScript(scripts);
+		String[] nuevoArrayScript = new String[scripts.size()];
+		i=0;
+		for (String str : scripts) {
+			nuevoArrayScript[i] = str;
+		}
+		movie.setScript(nuevoArrayScript);
+
+
+
+
 		// MUSIC
 		Elements _music = document.select("dt:contains(Música) + dd > div > span");
 		i = 0;
-		String[] music = new String[_music.size()];
+		List<String> musics = new ArrayList<String>();
+		//String[] music = new String[_music.size()];
 		for (Element element : _music) {
-			music[i] = element.text().replaceAll(",", StringUtils.EMPTY);
+			String addString = element.text();
+			//music[i] = element.text().replaceAll(",", StringUtils.EMPTY);
+			System.out.println("SCRIPTS["+i+"] ============> "+addString);
+			int parentesis = addString.indexOf(" (");
+			if(parentesis >= 0) {
+				addString = addString.substring(0,parentesis);
+				addString = addString.replaceAll(",",StringUtils.EMPTY);
+				musics.add(addString);
+				System.out.println("[MUSIC] HE AÑADIDO ===============> "+addString);
+				break;
+			} else {
+				addString = addString.replaceAll(",",StringUtils.EMPTY);
+				System.out.println("[MUSIC] HE AÑADIDO ===============> "+addString);
+				musics.add(addString);
+			}
 			i++;
 		}
-		movie.setMusic(music);
+		String[] nuevoArrayMusic = new String[musics.size()];
+		if(musics.size() > 0) {
+			i = 0;
+			for (String str : musics) {
+				nuevoArrayMusic[i] = str;
+			}
+		}
+		movie.setMusic(nuevoArrayMusic);
+		//movie.setMusic(music);
+
+
+
+
+
+
+
+
+
+
 		// PHOTOGRAPHY
 		Elements _photography = document.select("dt:contains(Fotografía) + dd > div > span");
 		i = 0;
@@ -290,15 +355,17 @@ public class CoreSearch extends AbstractCore {
 			i++;
 		}
 		movie.setCast(cast);
-		// PRODUCERS
+/*		// PRODUCERS
 		Elements _producer = document.select("dt:contains(Productora) + dd > div > span");
+		String[] producer = _producer.first().text().split(" / ");
+		*//*
 		i = 0;
 		String[] producer = new String[_producer.size()];
 		for (Element element : _producer) {
 			producer[i] = element.text().replaceAll(",", StringUtils.EMPTY);
 			i++;
-		}
-		movie.setProducer(producer);
+		}*//*
+		movie.setProducer(producer);*/
 		// GENRES
 		Elements _genre = document.select("dt:contains(Género) + dd > span");
 		i = 0;
@@ -308,7 +375,24 @@ public class CoreSearch extends AbstractCore {
 			i++;
 		}
 		movie.setGenre(genre);
-		// GROUPS
+		// SUBGENRES
+		System.out.println("Analizando los subgéneros");
+		Elements _subgenre = document.select("dt:contains(Género) + dd > a");
+		int j = 1;
+		for(Element element : _subgenre) {
+			System.out.println("Elemento número " + j + " -> " + element.cssSelector());
+			System.out.println(element.toString());
+			j++;
+		}
+		String[] subgenre = new String[_subgenre.size()];
+		i=0;
+		for(Element element : _subgenre) {
+			System.out.println("Añado el elemento =========> " + element.text());
+			subgenre[i] = element.text();
+			i++;
+		}
+		movie.setSubgenre(subgenre);
+/*		// GROUPS
 		Elements _groups = document.select("dt:contains(Grupos) + dd > span");
 		i = 0;
 		String[] groups = new String[_groups.size()];
@@ -316,7 +400,7 @@ public class CoreSearch extends AbstractCore {
 			groups[i] = element.text().replaceAll(",", StringUtils.EMPTY);
 			i++;
 		}
-		movie.setGroups(groups);
+		movie.setGroups(groups);*/
 		// SINOPSIS
 		Elements _sinopsis = document.select("dd[itemprop=description]");
 		String sinopsis = !_sinopsis.isEmpty()
@@ -335,7 +419,7 @@ public class CoreSearch extends AbstractCore {
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException
 	 */
-	private Movie obtainTrailers(Movie movie) throws IOException, NotEstablishedConnectionException {
+	/*private Movie obtainTrailers(Movie movie) throws IOException, NotEstablishedConnectionException {
 		Validate.notNull(movie, String.format(ConstantsSearch.MESSAGE_NOT_NULL, "Movie"));
 
 		final String URL = ConstantsSearch.URL_BASE.concat(ConstantsSearch.URL_TRAILERS)
@@ -357,7 +441,7 @@ public class CoreSearch extends AbstractCore {
 		movie.setTrailers(trailers);
 
 		return movie;
-	}
+	}*/
 
 	/**
 	 * Through {@link Movie}, obtain all images from the images tab
@@ -368,7 +452,7 @@ public class CoreSearch extends AbstractCore {
 	 * @throws IOException
 	 * @throws NotEstablishedConnectionException
 	 */
-	private Movie obtainImages(Movie movie) throws IOException, NotEstablishedConnectionException {
+/*	private Movie obtainImages(Movie movie) throws IOException, NotEstablishedConnectionException {
 		Validate.notNull(movie, String.format(ConstantsSearch.MESSAGE_NOT_NULL, "Movie"));
 
 		final String URL = ConstantsSearch.URL_BASE.concat(ConstantsSearch.URL_IMAGES).concat(movie.getId().toString());
@@ -389,7 +473,7 @@ public class CoreSearch extends AbstractCore {
 		movie.setImages(images);
 
 		return movie;
-	}
+	}*/
 
 	/**
 	 * By means of a name and type of search (director or cast)
