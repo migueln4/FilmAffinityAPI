@@ -407,14 +407,17 @@ public class CoreSearch extends AbstractCore {
 			i++;
 		}
 		movie.setGroups(groups);*/
+/*
 		// SINOPSIS
 		Elements _sinopsis = document.select("dd[itemprop=description]");
 		String sinopsis = !_sinopsis.isEmpty()
 				? _sinopsis.first().text().replace("(FILMAFFINITY)", StringUtils.EMPTY).trim() : StringUtils.EMPTY;
 		movie.setSynopsis(sinopsis);
-
+		*/
 		return movie;
+
 	}
+
 
 	/**
 	 * Through {@link Movie}, obtain all trailers from the trailers tab

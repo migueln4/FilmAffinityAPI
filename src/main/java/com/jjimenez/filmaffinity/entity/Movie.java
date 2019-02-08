@@ -26,7 +26,7 @@ public class Movie {
 	//private String[] producer;
 	private String[] genre;
 	//private String[] groups;
-	private String synopsis;
+	//private String synopsis;
 	//private Double rated;
 	//private String[] images;
 	private String imageDefault;
@@ -155,6 +155,7 @@ public class Movie {
 		this.groups = groups;
 	}*/
 
+/*
 	public String getSynopsis() {
 		return synopsis;
 	}
@@ -162,7 +163,7 @@ public class Movie {
 	public void setSynopsis(String synopsis) {
 		this.synopsis = synopsis;
 	}
-
+*/
 /*	public Double getRated() {
 		return rated;
 	}
@@ -224,7 +225,7 @@ public class Movie {
 /*		result = prime * result + Arrays.hashCode(producer);
 		result = prime * result + ((rated == null) ? 0 : rated.hashCode());*/
 		result = prime * result + Arrays.hashCode(script);
-		result = prime * result + ((synopsis == null) ? 0 : synopsis.hashCode());
+		//result = prime * result + ((synopsis == null) ? 0 : synopsis.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 /*		result = prime * result + Arrays.hashCode(trailers);*/
 		result = prime * result + ((year == null) ? 0 : year.hashCode());
@@ -295,11 +296,13 @@ public class Movie {
 			return false;*/
 		if (!Arrays.equals(script, other.script))
 			return false;
+		/*
 		if (synopsis == null) {
 			if (other.synopsis != null)
 				return false;
 		} else if (!synopsis.equals(other.synopsis))
 			return false;
+			*/
 		if (title == null) {
 			if (other.title != null)
 				return false;
@@ -334,7 +337,7 @@ public class Movie {
 				+ Arrays.toString(director) + ", script=" + Arrays.toString(script) + ", music="
 				+ Arrays.toString(music) + ", photography=" + Arrays.toString(photography) + ", cast="
 				+ Arrays.toString(cast) + ", genre="
-				+ Arrays.toString(genre) + "subgenre=" + Arrays.toString(subgenre) +  ", synopsis=" + synopsis + ", imageDefault=" + imageDefault;
+				+ Arrays.toString(genre) + "subgenre=" + Arrays.toString(subgenre) +  ", imageDefault=" + imageDefault;
 	}
 
 	
