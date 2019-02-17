@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class Movie {
 
-	//private Long id;
+	private String id;
 	private String title;
 	private String originalTitle;
 	private Integer year;
@@ -39,13 +39,13 @@ public class Movie {
 		return new Movie();
 	}
 
-	/*public Long getId() {
+	public String getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
-		this.id = id;
-	}*/
+		this.id = "m"+id;
+	}
 
 	public String getOriginalTitle() {
 		return originalTitle;
@@ -215,8 +215,8 @@ public class Movie {
 /*		result = prime * result + ((flagCountry == null) ? 0 : flagCountry.hashCode());*/
 		result = prime * result + Arrays.hashCode(genre);
 		result = prime * result + Arrays.hashCode(subgenre);
-/*		result = prime * result + Arrays.hashCode(groups);
-		result = prime * result + ((id == null) ? 0 : id.hashCode());*/
+		//result = prime * result + Arrays.hashCode(groups);
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((imageDefault == null) ? 0 : imageDefault.hashCode());
 /*		result = prime * result + Arrays.hashCode(images);*/
 		result = prime * result + Arrays.hashCode(music);
@@ -265,12 +265,12 @@ public class Movie {
 		if(!Arrays.equals(subgenre,other.subgenre))
 			return false;
 /*		if (!Arrays.equals(groups, other.groups))
-			return false;
+			return false;*/
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;*/
+			return false;
 		if (imageDefault == null) {
 			if (other.imageDefault != null)
 				return false;

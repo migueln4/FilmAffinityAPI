@@ -82,7 +82,7 @@ public class CoreTest {
 		System.out.println(lista.get(0).getId()+" es un "+lista.get(0).getId().getClass());
 		System.out.println(lista.get(0).getNota()+" es un "+lista.get(0).getNota().getClass());
 
-		////=====Hasta aquí ya tego leído el JSON
+		////=====Hasta aquí ya tengo leído el JSON
 
 		List<Movie> listapeliculas = new ArrayList<Movie>();
 		for(PeliculaResumen peli : lista) {

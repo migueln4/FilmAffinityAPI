@@ -211,7 +211,7 @@ public class CoreSearch extends AbstractCore {
 
 		Movie movie = Movie.getInstance();
 		// ID
-/*		movie.setId(id);*/
+		movie.setId(id);
 		// TITLE
 		Elements _title = document.select("#mt-content-cell > div > h1");
 		String title = !_title.isEmpty() ? _title.first().text() : StringUtils.EMPTY;
