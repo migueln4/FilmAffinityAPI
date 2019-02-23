@@ -11,7 +11,7 @@ import java.util.Arrays;
  */
 public class Movie {
 
-	private String id;
+	private Long id;
 	private String title;
 	private String originalTitle;
 	private Integer year;
@@ -39,12 +39,12 @@ public class Movie {
 		return new Movie();
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
-		this.id = "m"+id;
+		this.id = id;
 	}
 
 	public String getOriginalTitle() {

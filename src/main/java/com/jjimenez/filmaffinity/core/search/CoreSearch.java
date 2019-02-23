@@ -302,22 +302,31 @@ public class CoreSearch extends AbstractCore {
 		List<String> musics = new ArrayList<String>();
 		//String[] music = new String[_music.size()];
 		for (Element element : _music) {
+		    if(element == null)
+		        break;
 			String addString = element.text();
 			//music[i] = element.text().replaceAll(",", StringUtils.EMPTY);
-			System.out.println("SCRIPTS["+i+"] ============> "+addString);
+			System.out.println("MUSIC["+i+"] ============> "+addString);
+			i++;
 			int parentesis = addString.indexOf(" (");
 			if(parentesis >= 0) {
 				addString = addString.substring(0,parentesis);
+                System.out.println("[MUSIC] El primer addString es: "+addString);
 				addString = addString.replaceAll(",",StringUtils.EMPTY);
+                System.out.println("[MUSIC] El segundo addString es: "+addString);
+                if (addString.equals("Varios"))
+                    break;
 				musics.add(addString);
 				System.out.println("[MUSIC] HE AÑADIDO ===============> "+addString);
 				break;
 			} else {
 				addString = addString.replaceAll(",",StringUtils.EMPTY);
+                System.out.println("[MUSIC] El addString del ELSE es: "+addString);
+                if (addString.equals("Varios"))
+                    break;
 				System.out.println("[MUSIC] HE AÑADIDO ===============> "+addString);
 				musics.add(addString);
 			}
-			i++;
 		}
 		String[] nuevoArrayMusic = new String[musics.size()];
 		if(musics.size() > 0) {
